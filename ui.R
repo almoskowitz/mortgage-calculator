@@ -1,51 +1,71 @@
-setwd("/Users/andrew.moskowitz/Documents/GitHub/mortgage-calculator")
+#
+# This is the user-interface definition of a Shiny web application. You can
+# run the application by clicking 'Run App' above.
+#
+# Find out more about building applications with Shiny here:
+# 
+#    http://shiny.rstudio.com/
+#
 
 library(shiny)
-library(data.table)
-library(tidyverse)
 
-## set up vector of home prices in 25k increments
-price <- seq(250000, 1500000, 25000)
+# Define UI for application that draws a histogram
+ui <- shinyUI(fluidPage(
+  
+  # Application title
+  titlePanel("Mortgage Calculator"),
+  
+  # Sidebar with a slider input for number of bins 
+  sidebarLayout(
+    sidebarPanel(
+       sliderInput(inputId = "homeprice",
+                   label ="Home Price:",
+                   min = 100000,
+                   max = 3000000,
+                   step = 10000,
+                   value = 500000),
+       sliderInput("aftertaxincome",
+                   "After Tax Income:",
+                   min = 1000,
+                   max = 50000,
+                   step = 100,
+                   value = 4000),
+       sliderInput("years",
+                   "Duration of Loan:",
+                   min = 10,
+                   max = 30,
+                   step = 5,
+                   value = 30),
+       sliderInput("rate",
+                   "Annual Rate:",
+                   min = 1.0,
+                   max = 10.0,
+                   step = .01,
+                   value = 4.25),
+       selectInput("dollarPerc", "Down Payment Option",
+                   c(Dollar = 'dollar',
+                     Percent = 'perc')),
+       conditionalPanel(
+         condition = "input.dollarPerc == 'dollar'",
+         sliderInput("downpayment",
+                     'Down Payment:',
+                     min = 10000,
+                     max = 500000,
+                     step = 1000,
+                     value = 50000)),
+         conditionalPanel(
+         condition = "input.dollarPerc == 'perc'",
+         sliderInput("dperc",
+                     "Percentage of Downpayment:",
+                     min = 1,
+                     max = 50,
+                     step = .05,
+                     value = 20))),
+       
+       mainPanel(
+         plotOutput(outputId = 'distPlot')
+       )
+       )       ))
 
-ui <- pageWithSidebar(
-  
-  headerPanel("Mortgage Calculator"),
-  
-  sidebarPanel(
-    
-    sliderInput("home.value", "Price: ", 
-                min = 250000, max =
-                  1500000, value = 500000,
-                step = 25000, pre = "$"), 
-    
-    selectInput("dp.percent", "Basis for Downpayment:  ", 
-                c("$ Dollars" = 'down.payment',
-                  "% Percent" = 'down.percent')),
-    
-    ### How do I get this one to reference the home value
-    ### How do I connect slider values such that as one changes the other changes?
-    sliderInput("down.payment", "Down Payment: ",
-                min = 10000, max = 300000, value = 100000,
-                step = 5000, pre = "$"),
-    
-    sliderInput("down.percent", "Down Payment Percentage: ", 
-                min = 3.00, max = 25.00, value = 20,
-                step = .10, post = "%"),
-    
-    sliderInput("interest.rate", "Interest Rate: ",
-                min = 1.00, max = 10.00, value = 4.0,
-                step = .05, post = "%"),
-    
-    sliderInput("property.tax", "Property Tax: ",
-                min = .5, max  = 2.5, value = 1.0,
-                step = .02, post = '%')
-  ),
-  
-  mainPanel(
-    
-    dataTableOutput('caption')
-  )
-  
-)
 
 

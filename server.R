@@ -1,37 +1,26 @@
-### server for Mortgage application
+#
+# This is the server logic of a Shiny web application. You can run the 
+# application by clicking 'Run App' above.
+#
+# Find out more about building applications with Shiny here:
+# 
+#    http://shiny.rstudio.com/
+#
 
-server <- function(input, output){
+library(shiny)
+
+# Define server logic required to draw a histogram
+shinyServer(function(input, output) {
+   
+  output$distPlot <- renderPlot({
+    
+    # generate bins based on input$bins from ui.R
+    x    <- faithful[, 2] 
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    
+    # draw the histogram with the specified number of bins
+    hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    
+  })
   
-  target.house <- reactive({if(input$dp.percent == 'down.payment') {
-    
-    sale.price <- input$home.value
-    downpayment <- input$down.payment
-    loan.amount <- input$home.value - input$down.payment
-    monthly.interest.rate <- input$interest.rate/100/12
-    
-    discount.rate <- (((1+monthly.interest.rate)^360)-1) / (monthly.interest.rate*(1+ monthly.interest.rate)^360)
-    monthly.mortgage <- loan.amount/discount.rate
-    
-    property.tax <- (input$property.tax/100)*sale.price
-    monthly.property.tax <- property.tax/12
-    
-    df <- data.table(sale.price, downpayment, input$interest.rate, loan.amount, monthly.property.tax) ##,
-               #row.names = c('Sale Price', 'Downpayment', 'Interest Rate', 
-                #             'Loan Amount', 'Monthly Property Tax'))
-    colnames(df) <- c('Sale Price', 'Downpayment', 'Interest Rate', 'Loan Amount', 'Monthly Property Tax')
-    
-    df
-    
-  } else{input$down.percent/100}
 })
-  
-  output$caption <- renderDataTable(target.house())
-  
-
-}
-
-
-shinyApp(ui, server)
-
-
-t(data.table(1,2,3,4,5))
