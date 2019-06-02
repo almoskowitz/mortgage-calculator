@@ -3,7 +3,7 @@
 This is a shiny app designed to help with mortgage calculations to visualize how different offers will manifest into different monthly payment structures
 
 
-TO DO:
+## TO DO:
 * Add other scenarios in a single view
 * Add in PMI 
 * Add in Property Tax
