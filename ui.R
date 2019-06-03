@@ -16,7 +16,7 @@ ui <- shinyUI(
                   label ="Home Price:",
                   min = 100000,
                   max = 3000000,
-                  step = 10000,
+                  step = 5000,
                   value = 500000),
       sliderInput(inputId = "after.tax.income",
                   label = "Monthly After Tax Income:",
