@@ -56,7 +56,7 @@ ui <- shinyUI(
                   min = -50000,
                   max = 50000,
                   step = 500,
-                  value = 10000)),
+                  value = 20000)),
       
     mainPanel(
       
