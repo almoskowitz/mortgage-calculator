@@ -42,7 +42,21 @@ ui <- shinyUI(
                     "Percent" = 'perc'),
                   selected = 'dollar'),
       
-      uiOutput("ui")),
+      uiOutput("ui"),
+      
+      sliderInput(inputId = "downpayment.var2",
+                  label = "Downpayment Variation 2",
+                  min = -50000,
+                  max = 50000,
+                  step = 500,
+                  value = 10000),
+      
+      sliderInput(inputId = "downpayment.var3",
+                  label = "Downpayment Variation 3",
+                  min = -50000,
+                  max = 50000,
+                  step = 500,
+                  value = 10000)),
       
     mainPanel(
       
@@ -50,8 +64,8 @@ ui <- shinyUI(
       br(), br(),
       
       tableOutput("scenario.table"),
-      tableOutput("scenario.table2")
-      
+      tableOutput("scenario.table2"),
+      tableOutput("scenario.table3")
       
     )
   )))

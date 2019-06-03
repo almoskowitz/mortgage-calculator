@@ -10,7 +10,7 @@ server <- function(input, output) {
     # UI component and send it to the client.
     switch(input$dollar.Perc,
            "dollar" = sliderInput("down.payment",
-                                  'Down Payment:',
+                                  'Down Payment Option 1:',
                                   min = 10000,
                                   max = 500000,
                                   step = 1000,
@@ -43,8 +43,8 @@ server <- function(input, output) {
       return(input$home.price * input$dperc/100)
     }})
   
-  purchase.price <- reactive({input$home.price - dp()})
-  final<- reactive({(purchase.price()*mon_rate()*total_months())/discount_rate()})
+  loan.amount <- reactive({input$home.price - dp()})
+  final<- reactive({(loan.amount()*mon_rate()*total_months())/discount_rate()})
   monthly_cost <- reactive({final()/total_months()})
   remaining.income <- reactive({input$after.tax.income - monthly_cost()})
   closing.costs.low <- reactive({input$home.price * .02})
@@ -52,9 +52,9 @@ server <- function(input, output) {
   closing.costs.mid <- reactive((closing.costs.high() - closing.costs.low())/2 + closing.costs.low())
 
   dynamic.df <- function(price.variant){
-      df<-reactive({data.frame("price" = input$home.price + price.variant,
-             "Down Payment" = dp(),
-             "Loan Amount" = purchase.price(),
+      df<-reactive({data.frame("price" = input$home.price,
+             "Down Payment" = dp() + price.variant,
+             "Loan Amount" = loan.amount(),
              "Annual Rate" = input$interest.rate,
              "Monthly After Tax Income" = input$after.tax.income,
              "Monthly Cost" = monthly_cost(),
@@ -78,7 +78,8 @@ server <- function(input, output) {
   #                                                  "Total Cash Needed for Purchase" = dp() + closing.costs.mid(),
   #                                                  "Total Cost of House" = final()))),rownames= TRUE)
   output$scenario.table <- renderTable(t(dynamic.df(0)), rownames = TRUE)
-  output$scenario.table2 <- renderTable(t(dynamic.df(50000)), rownames = TRUE)
+  output$scenario.table2 <- renderTable(t(dynamic.df(input$downpayment.var2)), rownames = TRUE)
+  output$scenario.table3 <- renderTable(t(dynamic.df(input$downpayment.var3)), rownames = TRUE)
 
   
   }
