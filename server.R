@@ -1,4 +1,4 @@
-
+library(dplyr)
 
 server <- function(input, output) {
   
@@ -51,7 +51,7 @@ server <- function(input, output) {
   closing.costs.high <- reactive({input$home.price * .05})
   closing.costs.mid <- reactive((closing.costs.high() - closing.costs.low())/2 + closing.costs.low())
 
-  dynamic.df <- function(price.variant){
+  dynamic.df <- function(price.variant,scenario){
       df<-reactive({data.frame("price" = input$home.price,
              "Down Payment" = dp() + price.variant,
              "Loan Amount" = loan.amount(),
@@ -61,7 +61,7 @@ server <- function(input, output) {
              "Remaining Income" = remaining.income(),
              "Closing Cost Mid" = closing.costs.mid(),  
              "Total Cash Needed for Purchase" = dp() + closing.costs.mid(),
-             "Total Cost of House" = final())})
+             "Total Cost of House" = final(), row.names = c(scenario))})
       return(df())
       
       }
@@ -77,9 +77,12 @@ server <- function(input, output) {
   #                                                  "Closing Cost Mid" = closing.costs.mid(),  
   #                                                  "Total Cash Needed for Purchase" = dp() + closing.costs.mid(),
   #                                                  "Total Cost of House" = final()))),rownames= TRUE)
-  output$scenario.table <- renderTable(t(dynamic.df(0)), rownames = TRUE)
-  output$scenario.table2 <- renderTable(t(dynamic.df(input$downpayment.var2)), rownames = TRUE)
-  output$scenario.table3 <- renderTable(t(dynamic.df(input$downpayment.var3)), rownames = TRUE)
+  
+  #results1<- dynamic.df(0,"Scenario 1")
+  
+  output$scenario.table <- renderTable(cbind(t(dynamic.df(0, "Scenario 1")),
+                                 t(dynamic.df(input$downpayment.var2, "Scenario 2")),
+                                 t(dynamic.df(input$downpayment.var3, "Scenario 3"))), rownames = TRUE)
 
   
   }
