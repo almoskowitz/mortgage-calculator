@@ -43,8 +43,6 @@ server <- function(input, output) {
       return(input$home.price * input$dperc/100)
     }})
   
-  
-  
   purchase.price <- reactive({input$home.price - dp()})
   final<- reactive({(purchase.price()*mon_rate()*total_months())/discount_rate()})
   monthly_cost <- reactive({final()/total_months()})
@@ -53,18 +51,36 @@ server <- function(input, output) {
   closing.costs.high <- reactive({input$home.price * .05})
   closing.costs.mid <- reactive((closing.costs.high() - closing.costs.low())/2 + closing.costs.low())
 
+  dynamic.df <- function(price.variant){
+      df<-reactive({data.frame("price" = input$home.price + price.variant,
+             "Down Payment" = dp(),
+             "Loan Amount" = purchase.price(),
+             "Annual Rate" = input$interest.rate,
+             "Monthly After Tax Income" = input$after.tax.income,
+             "Monthly Cost" = monthly_cost(),
+             "Remaining Income" = remaining.income(),
+             "Closing Cost Mid" = closing.costs.mid(),  
+             "Total Cash Needed for Purchase" = dp() + closing.costs.mid(),
+             "Total Cost of House" = final())})
+      return(df())
+      
+      }
   
-  output$scenario.table <- renderTable((t(data.frame("price" = input$home.price,
-                                                     "Down Payment" = dp(),
-                                                   "Loan Amount" = purchase.price(),
-                                                   "Annual Rate" = input$interest.rate,
-                                                   "Monthly After Tax Income" = input$after.tax.income,
-                                                   "Monthly Cost" = monthly_cost(),
-                                                   "Remaining Income" = remaining.income(),
-                                                   "Closing Cost Mid" = closing.costs.mid(),  
-                                                   "Total Cash Needed for Purchase" = dp() + closing.costs.mid(),
-                                                   "Total Cost of House" = final()))),rownames= TRUE)
   
-}
+  # output$scenario.table <- renderTable((t(data.frame("price" = input$home.price,
+  #                                                    "Down Payment" = dp(),
+  #                                                  "Loan Amount" = purchase.price(),
+  #                                                  "Annual Rate" = input$interest.rate,
+  #                                                  "Monthly After Tax Income" = input$after.tax.income,
+  #                                                  "Monthly Cost" = monthly_cost(),
+  #                                                  "Remaining Income" = remaining.income(),
+  #                                                  "Closing Cost Mid" = closing.costs.mid(),  
+  #                                                  "Total Cash Needed for Purchase" = dp() + closing.costs.mid(),
+  #                                                  "Total Cost of House" = final()))),rownames= TRUE)
+  output$scenario.table <- renderTable(t(dynamic.df(0)), rownames = TRUE)
+  output$scenario.table2 <- renderTable(t(dynamic.df(50000)), rownames = TRUE)
+
+  
+  }
 
 shinyApp(ui, server)

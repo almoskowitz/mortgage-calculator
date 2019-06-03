@@ -49,7 +49,8 @@ ui <- shinyUI(
       #plotOutput("graphplaceholder"),
       br(), br(),
       
-      tableOutput("scenario.table")
+      tableOutput("scenario.table"),
+      tableOutput("scenario.table2")
       
       
     )
