@@ -6,7 +6,7 @@ This is a shiny app designed to help with mortgage calculations to visualize how
 ## TO DO:
 * ~Add other scenarios in a single view~
 * Add in PMI 
-* Add in Property Tax
+* ~Add in Property Tax~
 * Add in option for utilities and other regular costs
 * Connect to Redfin/Zillow API to be able to pull in specific listings
 * Create SlackBot to interface easily
