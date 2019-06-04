@@ -56,18 +56,22 @@ server <- function(input, output) {
       
       loan.amount <- reactive({input$home.price - dp()})
       final<- reactive({(loan.amount()*mon_rate()*total_months())/discount_rate()})
-      monthly_cost <- reactive({final()/total_months()})
-      remaining.income <- reactive({input$after.tax.income - monthly_cost()})
+      monthly_mort <- reactive({final()/total_months()})
+      
       closing.costs.low <- reactive({input$home.price * .02})
       closing.costs.high <- reactive({input$home.price * .05})
       closing.costs.mid <- reactive((closing.costs.high() - closing.costs.low())/2 + closing.costs.low())
+      monthly_tax <- reactive({(input$property.tax/100/12) * input$home.price})
+      remaining.income <- reactive({input$after.tax.income - monthly_mort() - monthly_tax()})
       
       df<-reactive({data.frame("price" = input$home.price,
              "Down Payment" = dp() + price.variant ,
              "Loan Amount" = loan.amount(),
              "Annual Rate" = input$interest.rate,
              "Monthly After Tax Income" = input$after.tax.income,
-             "Monthly Cost" = monthly_cost(),
+             "Monthly Mortgage" = monthly_mort(),
+             "Monthly Property Tax" = monthly_tax(),
+             "Monthly Payments" = monthly_mort() + monthly_tax(),
              "Remaining Income" = remaining.income(),
              "Closing Cost Mid" = closing.costs.mid(),  
              "Total Cash Needed for Purchase" = dp() + closing.costs.mid() + price.variant,
@@ -76,18 +80,22 @@ server <- function(input, output) {
       
       loan.amount <- reactive({input$home.price - dp() - input$downpayment.var2})
       final<- reactive({(loan.amount()*mon_rate()*total_months())/discount_rate()})
-      monthly_cost <- reactive({final()/total_months()})
-      remaining.income <- reactive({input$after.tax.income - monthly_cost()})
+      monthly_mort <- reactive({final()/total_months()})
+      
       closing.costs.low <- reactive({input$home.price * .02})
       closing.costs.high <- reactive({input$home.price * .05})
       closing.costs.mid <- reactive((closing.costs.high() - closing.costs.low())/2 + closing.costs.low())
+      monthly_tax <- reactive({(input$property.tax/100/12) * input$home.price})
+      remaining.income <- reactive({input$after.tax.income - monthly_mort() - monthly_tax()})
       
       df<-reactive({data.frame("price" = input$home.price,
                                "Down Payment" = dp() + price.variant ,
                                "Loan Amount" = loan.amount(),
                                "Annual Rate" = input$interest.rate,
                                "Monthly After Tax Income" = input$after.tax.income,
-                               "Monthly Cost" = monthly_cost(),
+                               "Monthly Mostgage" = monthly_mort(),
+                               "Monthly Property Tax" = monthly_tax(),
+                               "Monthly Payments" = monthly_mort() + monthly_tax(),
                                "Remaining Income" = remaining.income(),
                                "Closing Cost Mid" = closing.costs.mid(),  
                                "Total Cash Needed for Purchase" = dp() + closing.costs.mid() + price.variant,
@@ -95,18 +103,22 @@ server <- function(input, output) {
     } else if (scenario == 'Scenario 3'){
       loan.amount <- reactive({input$home.price - dp() - input$downpayment.var3})
       final<- reactive({(loan.amount()*mon_rate()*total_months())/discount_rate()})
-      monthly_cost <- reactive({final()/total_months()})
-      remaining.income <- reactive({input$after.tax.income - monthly_cost()})
+      monthly_mort <- reactive({final()/total_months()})
+      
       closing.costs.low <- reactive({input$home.price * .02})
       closing.costs.high <- reactive({input$home.price * .05})
       closing.costs.mid <- reactive((closing.costs.high() - closing.costs.low())/2 + closing.costs.low())
+      monthly_tax <- reactive({(input$property.tax/100/12) * input$home.price})
+      remaining.income <- reactive({input$after.tax.income - monthly_mort() - monthly_tax()})
       
       df<-reactive({data.frame("price" = input$home.price,
                                "Down Payment" = dp() + price.variant ,
                                "Loan Amount" = loan.amount(),
                                "Annual Rate" = input$interest.rate,
                                "Monthly After Tax Income" = input$after.tax.income,
-                               "Monthly Cost" = monthly_cost(),
+                               "Monthly Mortgage" = monthly_mort(),
+                               "Monthly Property Tax" = monthly_tax(),
+                               "Monthly Payments" = monthly_mort() + monthly_tax(),
                                "Remaining Income" = remaining.income(),
                                "Closing Cost Mid" = closing.costs.mid(),  
                                "Total Cash Needed for Purchase" = dp() + closing.costs.mid() + price.variant,
