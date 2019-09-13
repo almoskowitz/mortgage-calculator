@@ -35,7 +35,7 @@ ui <- shinyUI(
                   min = 1.0,
                   max = 10.0,
                   step = .01,
-                  value = 4.25),
+                  value = 3.625),
       selectInput(inputId = "dollar.Perc", 
                   label = "Down Payment Option",
                   c("Dollar" = 'dollar',

@@ -54,16 +54,24 @@ server <- function(input, output) {
   closing.costs.mid <- reactive((closing.costs.high() - closing.costs.low())/2 + closing.costs.low())
 
   
-  output$scenario.table <- renderTable((t(data.frame("price" = input$home.price,
+  #output$scenario.table <- renderTable((t(data.frame("price" = input$home.price,
+   #                                                  "Down Payment" = dp(),
+    #                                                 "Loan Amount" = purchase.price(),
+     #                                                "Annual Rate" = input$interest.rate,
+      #                                               "Monthly After Tax Income" = input$after.tax.income,
+       #                                              "Monthly Cost" = monthly_cost(),
+        #                                             "Remaining Income" = remaining.income(),
+         #                                            "Closing Cost Mid" = closing.costs.mid(),  
+          #                                           "Total Cash Needed for Purchase" = dp() + closing.costs.mid(),
+           #                                          "Total Cost of House" = final()))),rownames= TRUE)
+  
+  
+   output$scenario.table <- renderTable((data.frame("price" = input$home.price,
                                                      "Down Payment" = dp(),
                                                    "Loan Amount" = purchase.price(),
-                                                   "Annual Rate" = input$interest.rate,
-                                                   "Monthly After Tax Income" = input$after.tax.income,
                                                    "Monthly Cost" = monthly_cost(),
-                                                   "Remaining Income" = remaining.income(),
-                                                   "Closing Cost Mid" = closing.costs.mid(),  
-                                                   "Total Cash Needed for Purchase" = dp() + closing.costs.mid(),
-                                                   "Total Cost of House" = final()))),rownames= TRUE)
+                                                   "Total Cash Needed for Purchase" = dp() + input$home.price*.025
+                                                   )),rownames= TRUE)
   
 }
 
