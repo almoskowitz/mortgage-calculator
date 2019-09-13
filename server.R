@@ -140,7 +140,6 @@ server <- function(input, output) {
   #                                                  "Total Cash Needed for Purchase" = dp() + closing.costs.mid(),
   #                                                  "Total Cost of House" = final()))),rownames= TRUE)
   
-<<<<<<< HEAD
   #output$scenario.table <- renderTable((t(data.frame("price" = input$home.price,
    #                                                  "Down Payment" = dp(),
     #                                                 "Loan Amount" = purchase.price(),
@@ -159,14 +158,11 @@ server <- function(input, output) {
                                                    "Monthly Cost" = monthly_cost(),
                                                    "Total Cash Needed for Purchase" = dp() + input$home.price*.025
                                                    )),rownames= TRUE)
-=======
   #results1<- dynamic.df(0,"Scenario 1")
   
   output$scenario.table <- renderTable(cbind(t(dynamic.df(0, "Scenario 1")),
                                  t(dynamic.df(input$downpayment.var2, "Scenario 2")),
                                  t(dynamic.df(input$downpayment.var3, "Scenario 3"))), rownames = TRUE)
-
->>>>>>> e813bc00cb478af4dcc1ae012d460a407316606c
   
   }
 
